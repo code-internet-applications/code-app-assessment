@@ -19,10 +19,10 @@ Below an example (structure) of how the output should look. In green some commen
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <message xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="order_v2.2.xsd">
   <envelope>
-		<webshop>
-			<webshop_id>999</webshop_id>
-			<webshop_name>CODE TEST</webshop_name>
-		</webshop>
+    <webshop>
+      <webshop_id>999</webshop_id>
+      <webshop_name>CODE TEST</webshop_name>
+    </webshop>
   </envelope>
   <content>
     <order>
