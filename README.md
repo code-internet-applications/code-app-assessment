@@ -4,6 +4,8 @@ This assessment is designed to assess your skills. For this assessment you do no
 
 The boilerplate code that was provided is basicially what you get when you start a Firebase project. We removed the parts that are not needed for this test. The assignments are isolated parts and will not have to work in Firebase. We simply work with input and output files that needs to be processed. You'll need to setup integration tests to make the code testable.
 
+Feel free to set it up how you like, but keep it logical.
+
 
 ## 1. Convert a Shopify order to an XML file
 
@@ -109,3 +111,4 @@ Use the `testdata/output/shipment.xml` file to build a conversion towards a ship
 * Think about comments
 * Write integration tests on your implementation (and make sure they work)
 * Bonus points if you use the GraphQL API of Shopify instead of the REST API
+* Bonus points if you build tests that cover some 'sad flows'
