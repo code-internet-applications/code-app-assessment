@@ -106,6 +106,7 @@ Use the `testdata/output/shipment.xml` file to build a conversion towards a ship
 
 ## Generic Requirements
 
+* Build the solution in Typescript
 * Split the 2 assignments in 2 separate folders and take care of your file structure. 
     * If there are elements that you can share, please do that to avoid duplication
 * Think about comments
