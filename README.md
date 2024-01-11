@@ -27,7 +27,8 @@ Payload:
         "country": "The Netherlands"
     },
     "order": "CODE-1339",
-    "name": "Test User"
+    "name": "Test User",
+    "language": "en"
 }
 ```
 
@@ -40,6 +41,7 @@ Payload:
 * Please think about comments in your code
 * Think about a logical way to structurize your code
 * Bonus points if you write additional tests for your implementation
+* Bonus points if you make the label multilingual
 
 ## Installation and development
 
