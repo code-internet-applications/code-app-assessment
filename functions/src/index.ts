@@ -5,6 +5,9 @@ import { shippingLabel } from "./shipping-label";
 const app = express();
 const port = 3000;
 
+// Middlewares
+app.use(express.json());
+
 // set some routes
 app.get('/', (req: express.Request, res: express.Response) => res.send('Hello world!'));
 app.post('/get-label',shippingLabel);

@@ -9,7 +9,9 @@
     "allowJs": true,
     "esModuleInterop": true,
     "typeRoots": ["./typings", "./node_modules/@types"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
   },
   "include": ["./src/index.js", "./src/**/*"],
   "exclude": ["./build/*", "./keys/*", "./typings"]
