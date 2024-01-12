@@ -22,12 +22,14 @@ export type ShippingLabelParams = {
 export class ShippingLabelService {
   private pdfDoc: PDFDocument;
   private font: PDFFont;
+  private fontBold: PDFFont;
   private assetDir: string = path.resolve(__dirname, "../../../assets");
   private outputDir: string = path.resolve(__dirname, "../../../files");
 
-  constructor(pdfDoc: PDFDocument, font: PDFFont) {
+  constructor(pdfDoc: PDFDocument, font: PDFFont, fontBold: PDFFont) {
     this.pdfDoc = pdfDoc;
     this.font = font;
+    this.fontBold = fontBold;
   }
 
   // TODO: Remove this method after discussing with the team
@@ -45,7 +47,9 @@ export class ShippingLabelService {
     // Embed the Helvetica font
     const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-    return new ShippingLabelService(pdfDoc, helveticaFont);
+    const helveticaFontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+    return new ShippingLabelService(pdfDoc, helveticaFont, helveticaFontBold);
   }
 
   /**
@@ -56,13 +60,16 @@ export class ShippingLabelService {
 
     const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-    return new ShippingLabelService(pdfDoc, helveticaFont);
+    const helveticaFontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+    return new ShippingLabelService(pdfDoc, helveticaFont, helveticaFontBold);
   }
 
   private drawText(
     page: PDFPage,
     text: string,
-    positions: { x: number; y: number }
+    positions: { x: number; y: number },
+    bold: boolean = false
   ) {
     const { x, y } = positions;
 
@@ -70,7 +77,7 @@ export class ShippingLabelService {
       x,
       y,
       size: 14,
-      font: this.font,
+      font: bold ? this.fontBold : this.font,
       color: rgb(0, 0, 0),
     });
   }
@@ -226,32 +233,32 @@ export class ShippingLabelService {
 
     this.drawSeparator(page, translations.textAbove, translations.textBelow);
 
-    const addressNotePositions = { x: 80, y: height - 120 };
+    const addressNotePositions = { x: 50, y: height - 120 };
 
-    const addressNotes = [company, address, zip_code, city, country];
+    const addressNotes = [company, address, `${zip_code} ${city}`, country];
 
     const LINE_HEIGHT = 20;
 
-    for (let index = 1; index < addressNotes.length; index++) {
+    for (let index = 0; index < addressNotes.length; index++) {
       const text = addressNotes[index];
 
       this.drawText(page, text, {
         ...addressNotePositions,
-        y: addressNotePositions.y - LINE_HEIGHT * index,
-      });
+        y: addressNotePositions.y - LINE_HEIGHT * (index + 1),
+      }, true);
     }
 
     const orderLabelPositions = { x: 80, y: 290 };
     const orderNumberPositions = { x: 210, y: 290 };
 
     this.drawText(page, translations.orderNumber, orderLabelPositions);
-    this.drawText(page, order, orderNumberPositions);
+    this.drawText(page, order, orderNumberPositions, true);
 
     const nameLabelPositions = { x: 80, y: 215 };
     const namePositions = { x: 140, y: 215 };
 
     this.drawText(page, translations.name, nameLabelPositions);
-    this.drawText(page, name, namePositions);
+    this.drawText(page, name, namePositions, true);
 
     // Serialize the PDFDocument to bytes (a Uint8Array)
     const pdfBytes = await this.pdfDoc.save();
