@@ -1,10 +1,10 @@
-import { PDFDocument, PDFFont, PDFPage, StandardFonts, rgb } from "pdf-lib";
-import { v4 as uuidv4 } from "uuid";
 import fs from "fs/promises";
 import path from "path";
+import { PDFDocument, PDFFont, PDFPage, StandardFonts, rgb } from "pdf-lib";
+import { v4 as uuidv4 } from "uuid";
 
-import type { Langugage } from "../types";
 import { getTranslations } from "../translations";
+import type { Langugage } from "../types";
 
 export type ShippingLabelParams = {
   name: string;
@@ -32,26 +32,6 @@ export class ShippingLabelService {
     this.fontBold = fontBold;
   }
 
-  // TODO: Remove this method after discussing with the team
-  /**
-   *  Use this method to initialize the service for editing an existing PDFDocument that is your template PDF.
-   **/
-  static async build(
-    url: string = "https://filebin.net/g8gbdhxll416yoly/sample-label__1_.pdf"
-  ) {
-    const existingPdfBytes = await fetch(url).then((res) => res.arrayBuffer());
-
-    // Load a PDFDocument from the existing PDF bytes
-    const pdfDoc = await PDFDocument.load(existingPdfBytes);
-
-    // Embed the Helvetica font
-    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
-
-    const helveticaFontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-
-    return new ShippingLabelService(pdfDoc, helveticaFont, helveticaFontBold);
-  }
-
   /**
    *  Use this method to initialize the service for creating a new PDFDocument from blank as per your design.
    **/
@@ -60,7 +40,9 @@ export class ShippingLabelService {
 
     const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-    const helveticaFontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    const helveticaFontBold = await pdfDoc.embedFont(
+      StandardFonts.HelveticaBold
+    );
 
     return new ShippingLabelService(pdfDoc, helveticaFont, helveticaFontBold);
   }
@@ -80,58 +62,6 @@ export class ShippingLabelService {
       font: bold ? this.fontBold : this.font,
       color: rgb(0, 0, 0),
     });
-  }
-
-  public async print(params: ShippingLabelParams) {
-    const { name, order, return_address } = params;
-
-    // Get the first page of the document
-    const pages = this.pdfDoc.getPages();
-    const firstPage = pages[0];
-
-    // Get the width and height of the first page
-    const { height } = firstPage.getSize();
-
-    const { company, address, zip_code, city, country } = return_address;
-    // TODO: Make it multi-lingual
-    // const language = "en";
-
-    const headerPositions = { x: 80, y: height - 120 };
-
-    const texts = [company, address, zip_code, city, country];
-
-    let i = 1;
-
-    for (const text of texts) {
-      i++;
-      this.drawText(firstPage, text, {
-        ...headerPositions,
-        y: headerPositions.y - 20 * i,
-      });
-    }
-
-    const footerPositions = { x: 210, y: 290 };
-
-    this.drawText(firstPage, order, footerPositions);
-
-    const namePositions = { x: 140, y: 215 };
-
-    this.drawText(firstPage, name, namePositions);
-
-    // Serialize the PDFDocument to bytes (a Uint8Array)
-    const pdfBytes = await this.pdfDoc.save();
-
-    const filename = "shipping-label.pdf";
-    // Save the PDF document to local disk
-    await fs.writeFile(
-      path.resolve(__dirname, `../../../assets/${filename}`),
-      pdfBytes,
-      {
-        encoding: "utf-8",
-      }
-    );
-
-    console.log(`PDF file generated: ${filename}`);
   }
 
   private drawPostageBox(page: PDFPage, text: string) {
@@ -242,10 +172,15 @@ export class ShippingLabelService {
     for (let index = 0; index < addressNotes.length; index++) {
       const text = addressNotes[index];
 
-      this.drawText(page, text, {
-        ...addressNotePositions,
-        y: addressNotePositions.y - LINE_HEIGHT * (index + 1),
-      }, true);
+      this.drawText(
+        page,
+        text,
+        {
+          ...addressNotePositions,
+          y: addressNotePositions.y - LINE_HEIGHT * (index + 1),
+        },
+        true
+      );
     }
 
     const orderLabelPositions = { x: 80, y: 290 };
