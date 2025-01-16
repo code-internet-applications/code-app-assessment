@@ -35,13 +35,20 @@ Payload:
 
 ### Requirements
 
+Please do not spend more than 2 hours on this assessment (if it is not finished, please add comments to the code to explain what you would have done if you had more time).
+
 * Build the solution in Typescript
+* You may use AI to generate code, but you should understand the code you write
+    * Building it without AI has our preference as it better assesses your skills
 * Feel free to use any package you want to generate the PDF
 * Make an HTTPS endpoint in Express that provides the PDF as output
-* Please think about comments in your code
+* Please think about comments in your code (JSDoc)
 * Think about a logical way to structurize your code
-* Bonus points if you write additional tests for your implementation
+* Bonus points if you write additional tests for your implementation (please do not use AI to write the tests)
 * Bonus points if you make the label multilingual
+
+Please download the `code-assessment.zip` file and work from there (please do not create a fork of this repository).
+You may setup a new repository if you want to (it also shows your commits).
 
 ## Installation and development
 
